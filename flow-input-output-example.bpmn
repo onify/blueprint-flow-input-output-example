@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0edhhxd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:process id="blueprint-flow-input-output-example" name="Onify Blueprint: Flow Input and Output example" isExecutable="true">
+    <bpmn:endEvent id="Event_1bcllv0" name="Done">
+      <bpmn:incoming>Flow_038m9gt</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0pfd6hh" sourceRef="StartEvent_1" targetRef="isUserSet" />
+    <bpmn:serviceTask id="GetUserRequest" name="Get user info via httpRequest">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="responseType">json</camunda:inputParameter>
+            <camunda:inputParameter name="url">https://jsonplaceholder.typicode.com/users/${environment.variables.input.userId}</camunda:inputParameter>
+            <camunda:outputParameter name="body">${body}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>httpRequest</camunda:connectorId>
+        </camunda:connector>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="output">${content.output.body}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1i8h8ji</bpmn:incoming>
+      <bpmn:incoming>Flow_054odye</bpmn:incoming>
+      <bpmn:outgoing>Flow_038m9gt</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_038m9gt" sourceRef="GetUserRequest" targetRef="Event_1bcllv0" />
+    <bpmn:exclusiveGateway id="isUserSet" name="userId set?" default="Flow_0g4lxe7">
+      <bpmn:incoming>Flow_0pfd6hh</bpmn:incoming>
+      <bpmn:outgoing>Flow_1i8h8ji</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0g4lxe7</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1i8h8ji" name="Yes" sourceRef="isUserSet" targetRef="GetUserRequest">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${environment.variables.input.userId}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0g4lxe7" name="No" sourceRef="isUserSet" targetRef="SetUserToOne" />
+    <bpmn:sequenceFlow id="Flow_054odye" sourceRef="SetUserToOne" targetRef="GetUserRequest" />
+    <bpmn:startEvent id="StartEvent_1" name="Start">
+      <bpmn:outgoing>Flow_0pfd6hh</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="SetUserToOne" name="userId = 1" scriptFormat="javascript">
+      <bpmn:incoming>Flow_0g4lxe7</bpmn:incoming>
+      <bpmn:outgoing>Flow_054odye</bpmn:outgoing>
+      <bpmn:script>environment.variables.input = environment.variables.input || {};
+environment.variables.input.userId = 1;
+next();</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="blueprint-flow-input-output-example">
+      <bpmndi:BPMNEdge id="Flow_054odye_di" bpmnElement="Flow_054odye">
+        <di:waypoint x="455" y="280" />
+        <di:waypoint x="539" y="280" />
+        <di:waypoint x="539" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0g4lxe7_di" bpmnElement="Flow_0g4lxe7">
+        <di:waypoint x="290" y="152" />
+        <di:waypoint x="290" y="280" />
+        <di:waypoint x="355" y="280" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="298" y="213" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1i8h8ji_di" bpmnElement="Flow_1i8h8ji">
+        <di:waypoint x="315" y="127" />
+        <di:waypoint x="489" y="127" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="393" y="109" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_038m9gt_di" bpmnElement="Flow_038m9gt">
+        <di:waypoint x="589" y="127" />
+        <di:waypoint x="651" y="127" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pfd6hh_di" bpmnElement="Flow_0pfd6hh">
+        <di:waypoint x="218" y="127" />
+        <di:waypoint x="265" y="127" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Gateway_1fv6jds_di" bpmnElement="isUserSet" isMarkerVisible="true">
+        <dc:Bounds x="265" y="102" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="263" y="78" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0zeqils_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="109" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="189" y="152" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ycotdp_di" bpmnElement="SetUserToOne">
+        <dc:Bounds x="355" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02tc8fr_di" bpmnElement="GetUserRequest">
+        <dc:Bounds x="489" y="87" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1bcllv0_di" bpmnElement="Event_1bcllv0">
+        <dc:Bounds x="651" y="109" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="656" y="152" width="27" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
