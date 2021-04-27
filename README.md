@@ -1,6 +1,10 @@
-# Onify Blueprint: Flow Input and Output example
+![Onify Blueprints](https://files.readme.io/8ba3f14-onify-blueprints-logo.png)
 
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
+# Onify Blueprint: Flow Input and Output example
+
+Want to start a process in the background with input parameters? Here is how! This will also return back output in the process that you can use. You can very easy now connect a Onify workflow/flow (BPMN) using our powerful REST-API to your own system.
 
 ![alt text](flow.png "Flow")
 
