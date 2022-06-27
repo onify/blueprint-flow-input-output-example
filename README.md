@@ -6,7 +6,7 @@
 
 Want to start a process in the background with input parameters? Here is how! This will also return back output in the process that you can use. You can very easy now connect a Onify workflow/flow (BPMN) using our powerful REST-API to your own system.
 
-![alt text](flow.png "Flow")
+![Onify Blueprint: Flow Input and Output example](blueprint.jpg "Blueprint")
 
 ## Requirements
 
